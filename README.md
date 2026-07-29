@@ -1,8 +1,8 @@
 # windninja_ERA5
 code and repo for testing ERA5 use as windninja input 
 ==========================================================================
- era5_wrf_TEST - ERA5-driven WindNinja hourly wind workflow (TEST)
-==========================================================================
+
+ERA5-driven WindNinja hourly wind workflow (TEST)
 
 WHAT THIS IS
 ------------
