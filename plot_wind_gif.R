@@ -81,8 +81,8 @@ vmax <- ceiling(vmax)
 cat(sprintf("%d frames, global max speed -> shared scale 0..%d m/s\n",
             length(runs), vmax))
 
-pal <- hcl.colors(64, "Viridis")          # sequential, perceptually uniform, CVD-safe
-arrow_col <- "white"                       # neutral overlay, readable on dark high-speed fill
+pal <- rev(rainbow(100, end = 0.8))       # house-style ramp (matches HCDP wind products)
+arrow_col <- "white"
 
 # optional coastline, reprojected to the raster CRS and cropped to the map
 coast <- NULL
@@ -108,9 +108,9 @@ for (r in runs) {
   xy  <- crds(spd_c, na.rm = FALSE)
   uu  <- values(u_c)[, 1]; vv <- values(v_c)[, 1]; ss <- values(spd_c)[, 1]
   ok  <- is.finite(uu) & is.finite(vv) & is.finite(ss) & ss > 0
-  # arrow length proportional to speed on the SHARED scale
-  max_len <- fact * res(spd)[1] * 0.9
-  sc <- (ss[ok] / vmax) * max_len / sqrt(uu[ok]^2 + vv[ok]^2)
+  # fixed arrow length (direction only; speed is carried by the fill)
+  arrow_len <- fact * res(spd)[1] * 0.8
+  sc <- arrow_len / sqrt(uu[ok]^2 + vv[ok]^2)
 
   stamp    <- paste(format(r$time, "%Y-%m-%d %H:%M"), tz_lab)
   png_name <- file.path(out_dir, format(r$time, paste0(run_name, "_%Y%m%d_%H%M.png")))
@@ -124,7 +124,7 @@ for (r in runs) {
   arrows(xy[ok, 1], xy[ok, 2],
          xy[ok, 1] + uu[ok] * sc, xy[ok, 2] + vv[ok] * sc,
          length = 0.025, lwd = 0.8, col = arrow_col)
-  if (!is.null(coast)) lines(coast, col = "black", lwd = 1.2)
+  if (!is.null(coast)) lines(coast, col = "white", lwd = 2.5)
   sbar(10000, xy = "bottomleft", type = "bar", divs = 2, below = "m", cex = 0.7)
   dev.off()
 
