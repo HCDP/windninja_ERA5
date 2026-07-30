@@ -1,8 +1,10 @@
 #!/bin/bash
 # Single-hour WindNinja test run: Maui (MN), 2023-08-08 14:00 HST (= 2023-08-09 00:00 UTC),
-# initialized from the ERA5 WRF-mimic forecast file. Output goes to /home/wn1/data/wn_test_outs.
-# Same flags as the full workflow (wn_era5_hi_1hr.py) except output_path, single hour,
-# and num_threads raised to 4 since nothing else is running in parallel.
+# initialized from a SINGLE-TIMESTEP ERA5 WRF-mimic file. WindNinja runs every band in
+# a supplied forecast file (start/stop flags are ignored for wx-model runs on this
+# build), so the 1-band hourly file is what makes this a 1-hour run.
+# Output goes to /home/wn1/data/wn_test_outs. Same flags as the full workflow
+# (wn_era5_hi_1hr.py) except output_path and num_threads=4 (nothing else running).
 
 OUT_DIR=/home/wn1/data/wn_test_outs
 mkdir -p "$OUT_DIR"
@@ -11,7 +13,7 @@ mkdir -p "$OUT_DIR"
   --num_threads=4 \
   --elevation_file=/home/wn1/data/lndscp/MN_utm_z4.tif \
   --initialization_method=wxModelInitialization \
-  --forecast_filename=/home/wn1/data/input/er5_wrf/wrfout_era5_20230808_20230809.nc \
+  --forecast_filename=/home/wn1/data/input/er5_wrf/hourly/wrfout_era5_20230809_0000.nc \
   --time_zone=Pacific/Honolulu \
   --diurnal_winds=true \
   --output_wind_height=10.0 \
@@ -25,9 +27,7 @@ mkdir -p "$OUT_DIR"
   --write_ascii_output=true \
   --write_farsite_atm=false \
   --output_path="$OUT_DIR" \
-  --momentum_flag=false \
-  --start_year=2023 --start_month=08 --start_day=08 --start_hour=14 --start_minute=00 \
-  --stop_year=2023  --stop_month=08  --stop_day=08  --stop_hour=14  --stop_minute=00
+  --momentum_flag=false
 
 echo "WindNinja exit code: $?"
 ls -la "$OUT_DIR"

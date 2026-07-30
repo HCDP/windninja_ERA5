@@ -25,10 +25,15 @@ windProducts_era5). Operational products are never touched.
 DEPLOYED LOCATION
 -----------------
   Code:      /home/wn1/wn_codes/era5_wrf_TEST/          (this directory)
-  Forecast:  /home/wn1/data/input/er5_wrf/wrfout_era5_20230808_20230809.nc
-             (made locally by era5_to_wrfout.R from an ERA5 GRIB; covers
-             2023-08-08 00:00 - 2023-08-09 23:00 UTC, i.e. all of
-             2023-08-08 HST)
+  Forecast:  /home/wn1/data/input/er5_wrf/hourly/wrfout_era5_<YYYYMMDD_HHMM>.nc
+             ONE SINGLE-TIMESTEP file per hour, named by UTC valid time
+             (made locally by era5_to_wrfout.R with --start/--stop; 48 files
+             cover 2023-08-08 00:00 - 2023-08-09 23:00 UTC = all of
+             2023-08-08 HST). Per-hour files are required because WindNinja
+             runs EVERY band in a supplied forecast file - start/stop flags
+             are ignored for wx-model runs - so a 1-band file is what makes
+             an hourly run run one hour. wn_era5_hi_1hr.py picks the file
+             for its hour automatically (HST + 10h -> UTC name).
 
 HOW TO RUN
 ----------
@@ -181,7 +186,8 @@ PATH OVERRIDES (env vars, all optional)
   WN_CODE_DIR        this code dir        (default /home/wn1/wn_codes/era5_wrf_TEST)
   WN_DATA_DIR        data root            (default /home/wn1/data/)
   WN_CLI             WindNinja_cli path   (default /home/wn1/wn_build/src/cli/WindNinja_cli)
-  WN_FORECAST_FILE   ERA5 mimic NetCDF    (default $WN_DATA_DIR/input/er5_wrf/wrfout_era5_20230808_20230809.nc)
+  WN_FORECAST_DIR    hourly mimic files   (default $WN_DATA_DIR/input/er5_wrf/hourly/)
+  WN_FORECAST_FILE   force one exact file (default <WN_FORECAST_DIR>/wrfout_era5_<UTC>.nc)
   WN_STATION_DIR     raw obs tree         (default /home/wn1/data/input/stationFiles/)
   WN_ERA5_INPUT      validation tables    (default /home/wn1/data/input/wn_era5_input)
   WN_ERA5_OUT        WindNinja output     (default /home/wn1/data/output/wn_era5_out)

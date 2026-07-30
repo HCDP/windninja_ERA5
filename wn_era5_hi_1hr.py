@@ -26,26 +26,24 @@ def task(extent,st):
     # the input files
     elevation_file = extent + "_utm_z4.tif"
 
-    # the ERA5 WRF-mimic forecast file (UTC times inside; WindNinja matches the
-    # HST start/stop below to the right band via --time_zone)
-    forecast_file = os.environ.get(
-        "WN_FORECAST_FILE",
-        directory_path + "input/er5_wrf/wrfout_era5_20230808_20230809.nc")
-
     #get time flags
     st_dt = datetime.strptime(st,'%Y-%m-%d_%H:%M:%S')
+
+    # the ERA5 WRF-mimic forecast file: one SINGLE-TIMESTEP file per hour,
+    # named by UTC valid time (HST + 10h). WindNinja runs every band in a
+    # supplied forecast file (start/stop flags are ignored for wx-model runs
+    # on this build), so a 1-band file is what makes this a 1-hour run.
+    # Per-hour files are produced by era5_to_wrfout.R with --start/--stop.
+    utc_dt = st_dt + timedelta(hours=10)
+    forecast_dir = os.environ.get("WN_FORECAST_DIR", directory_path + "input/er5_wrf/hourly/")
+    forecast_file = os.environ.get(
+        "WN_FORECAST_FILE",
+        forecast_dir + "wrfout_era5_" + utc_dt.strftime('%Y%m%d_%H%M') + ".nc")
     st_year = st_dt.strftime('%Y')
     st_mon = st_dt.strftime('%m')
     st_day = st_dt.strftime('%d')
     st_hr = st_dt.strftime('%H')
     st_min = st_dt.strftime('%M')
-
-    en_dt = st_dt
-    en_year = st_dt.strftime('%Y')
-    en_mon = st_dt.strftime('%m')
-    en_day = st_dt.strftime('%d')
-    en_hr = st_dt.strftime('%H')
-    en_min = st_dt.strftime('%M')
 
     #make DT and extent outdirs
     outDate = st_year + st_mon + st_day
@@ -79,16 +77,7 @@ def task(extent,st):
     cmd += " --write_farsite_atm=false"
     cmd += " --output_path="+out_dir
     cmd += " --momentum_flag=false"
-    cmd += " --start_year="+st_year
-    cmd += " --start_month="+st_mon
-    cmd += " --start_day="+st_day
-    cmd += " --start_hour="+st_hr
-    cmd += " --start_minute="+st_min
-    cmd += " --stop_year="+en_year
-    cmd += " --stop_month="+en_mon
-    cmd += " --stop_day="+en_day
-    cmd += " --stop_hour="+en_hr
-    cmd += " --stop_minute="+en_min
+    # no start/stop flags: the single-timestep forecast file selects the hour
 
     # creating a process to run the command
     print(cmd)
