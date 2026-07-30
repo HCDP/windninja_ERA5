@@ -114,6 +114,29 @@ STEP 8: dailyWind_mkr_era5.R <YYYY-MM-DD>   (run by STEP 1 at the end)
     dailyMean*/dailyMedian*/dailyMax*), pairs CSVs saved under
     day/<CO>/validation/.
 
+MIMIC-MAKING CODE (runs locally, not on the server)
+---------------------------------------------------
+  era5_to_wrfout.R      The ERA5 GRIB -> WRF-mimic NetCDF converter
+                        (--input/--output/--start/--stop/--res). Needs R with
+                        terra + RNetCDF.
+  make_era5_hourly.R    Driver that splits a whole ERA5 GRIB into the
+                        single-timestep hourly files WindNinja needs:
+                        Rscript make_era5_hourly.R --input <grib> --outdir <dir> [--res m]
+                        Files are named wrfout_era5_YYYYMMDD_HHMM.nc (UTC).
+                        For small downloaded domains reduce --res so the
+                        target grid is at least 4x4 (a 1.25 deg box needs
+                        res <= ~13000).
+
+EVENT RUN SCRIPTS
+-----------------
+  test_single_hr_MN.sh       Maui, 2023-08-08 14:00 HST (Lahaina), one hour,
+                             momentum solver ON.
+  test_iniki_KA_19920911.sh  Kauai, 1992-09-11 11:00-17:00 HST (Hurricane
+                             Iniki), 7 hourly runs, mass-only by default
+                             (MOMENTUM=true env var enables the momentum
+                             solver). Forecast files expected in
+                             $WN_DATA_DIR/input/er5_wrf/hourly/1992_09/.
+
 SHARED CODE
 -----------
   wind_validation_fx.R
