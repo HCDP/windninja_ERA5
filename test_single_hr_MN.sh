@@ -16,6 +16,7 @@ mkdir -p "$OUT_DIR"
   --forecast_filename=/home/wn1/data/input/er5_wrf/hourly/wrfout_era5_20230809_0000.nc \
   --time_zone=Pacific/Honolulu \
   --diurnal_winds=true \
+  --output_speed_units=mps \
   --output_wind_height=10.0 \
   --units_output_wind_height=m \
   --mesh_resolution=250 \

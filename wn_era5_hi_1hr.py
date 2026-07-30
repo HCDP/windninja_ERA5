@@ -64,6 +64,7 @@ def task(extent,st):
     cmd += " --forecast_filename=" + forecast_file
     cmd += " --time_zone=Pacific/Honolulu"
     cmd += " --diurnal_winds=true" ##diurnal wind: ON - ERA5 mimic supplies gridded T2 + cloud cover
+    cmd += " --output_speed_units=mps"
     cmd += " --output_wind_height=10.0"
     cmd += " --units_output_wind_height=m"
     ##cmd += " --vegetation=grass" ##ON when elevation_file is dem; OFF when elevation_file is lndscp
