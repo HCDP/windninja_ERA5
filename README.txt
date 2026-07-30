@@ -127,6 +127,17 @@ MIMIC-MAKING CODE (runs locally, not on the server)
                         target grid is at least 4x4 (a 1.25 deg box needs
                         res <= ~13000).
 
+VISUALIZATION (runs locally; needs R with terra + magick)
+---------------------------------------------------------
+  plot_wind_gif.R    Per-hour PNG maps (speed fill + direction arrows, all
+                     frames on a shared 0..globalmax m/s scale) from any dir
+                     of WindNinja *_vel.asc/*_ang.asc outputs, then an
+                     animated GIF (default 1 s per frame):
+                     Rscript plot_wind_gif.R --indir <wn_out_dir> --outdir <dir> \
+                       [--title t] [--name n] [--delay 100] [--fact 15] [--tz HST]
+                     Direction is aggregated through U/V components (never
+                     averaged as angles); arrow length scales with speed.
+
 EVENT RUN SCRIPTS
 -----------------
   test_single_hr_MN.sh       Maui, 2023-08-08 14:00 HST (Lahaina), one hour,
