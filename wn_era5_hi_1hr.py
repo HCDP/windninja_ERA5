@@ -30,7 +30,7 @@ def task(extent,st):
     # HST start/stop below to the right band via --time_zone)
     forecast_file = os.environ.get(
         "WN_FORECAST_FILE",
-        directory_path + "input/wrfout_era5_20230808_20230809.nc")
+        directory_path + "input/er5_wrf/wrfout_era5_20230808_20230809.nc")
 
     #get time flags
     st_dt = datetime.strptime(st,'%Y-%m-%d_%H:%M:%S')

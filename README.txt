@@ -25,7 +25,7 @@ windProducts_era5). Operational products are never touched.
 DEPLOYED LOCATION
 -----------------
   Code:      /home/wn1/wn_codes/era5_wrf_TEST/          (this directory)
-  Forecast:  /home/wn1/data/input/wrfout_era5_20230808_20230809.nc
+  Forecast:  /home/wn1/data/input/er5_wrf/wrfout_era5_20230808_20230809.nc
              (made locally by era5_to_wrfout.R from an ERA5 GRIB; covers
              2023-08-08 00:00 - 2023-08-09 23:00 UTC, i.e. all of
              2023-08-08 HST)
@@ -181,7 +181,7 @@ PATH OVERRIDES (env vars, all optional)
   WN_CODE_DIR        this code dir        (default /home/wn1/wn_codes/era5_wrf_TEST)
   WN_DATA_DIR        data root            (default /home/wn1/data/)
   WN_CLI             WindNinja_cli path   (default /home/wn1/wn_build/src/cli/WindNinja_cli)
-  WN_FORECAST_FILE   ERA5 mimic NetCDF    (default $WN_DATA_DIR/input/wrfout_era5_20230808_20230809.nc)
+  WN_FORECAST_FILE   ERA5 mimic NetCDF    (default $WN_DATA_DIR/input/er5_wrf/wrfout_era5_20230808_20230809.nc)
   WN_STATION_DIR     raw obs tree         (default /home/wn1/data/input/stationFiles/)
   WN_ERA5_INPUT      validation tables    (default /home/wn1/data/input/wn_era5_input)
   WN_ERA5_OUT        WindNinja output     (default /home/wn1/data/output/wn_era5_out)
