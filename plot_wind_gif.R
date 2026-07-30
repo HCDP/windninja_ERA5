@@ -19,9 +19,13 @@
 #   --name     basename for outputs (default: basename of indir);
 #              PNGs: <name>_<YYYYMMDD_HHMM>.png, GIF: <name>_wind.gif
 #   --delay    GIF frame delay in 1/100 s (default 100 = 1 s per hour)
-#   --fact     arrow aggregation factor in cells (default 15; at 250 m
-#              resolution that is one arrow per 3.75 km)
+#   --fact     arrow aggregation factor in cells (default 6; at 250 m
+#              resolution that is one arrow per 1.5 km)
 #   --tz       time zone label for the title timestamps (default "HST")
+#   --coast    coastline vector file (shp/gpkg) drawn over the map; reprojected
+#              to the raster CRS automatically. Default is the local Hawaii
+#              coastline (C:/Users/mpluc/gis_data/hi_coastline/Coastline.shp);
+#              silently skipped if the file does not exist. --coast none disables.
 #
 # Example (Hurricane Iniki, Kauai):
 #   Rscript plot_wind_gif.R \
@@ -51,8 +55,9 @@ if (is.null(in_dir) || is.null(out_dir)) {
 title_1 <- get_arg("--title", "WindNinja 10 m wind")
 run_name <- get_arg("--name", basename(normalizePath(in_dir, mustWork = FALSE)))
 delay_cs <- as.numeric(get_arg("--delay", "100"))
-fact     <- as.integer(get_arg("--fact", "15"))
+fact     <- as.integer(get_arg("--fact", "6"))
 tz_lab   <- get_arg("--tz", "HST")
+coast_in <- get_arg("--coast", "C:/Users/mpluc/gis_data/hi_coastline/Coastline.shp")
 
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
@@ -78,6 +83,16 @@ cat(sprintf("%d frames, global max speed -> shared scale 0..%d m/s\n",
 
 pal <- hcl.colors(64, "Viridis")          # sequential, perceptually uniform, CVD-safe
 arrow_col <- "white"                       # neutral overlay, readable on dark high-speed fill
+
+# optional coastline, reprojected to the raster CRS and cropped to the map
+coast <- NULL
+if (tolower(coast_in) != "none" && file.exists(coast_in)) {
+  r0 <- rast(runs[[1]]$vel)
+  coast <- tryCatch(crop(project(vect(coast_in), crs(r0)), ext(r0)),
+                    error = function(e) { cat("coastline skipped:", conditionMessage(e), "\n"); NULL })
+} else if (tolower(coast_in) != "none") {
+  cat("coastline file not found, skipping:", coast_in, "\n")
+}
 
 # ---- one map per hour ------------------------------------------------------
 png_files <- character(0)
@@ -108,7 +123,8 @@ for (r in runs) {
        cex.main = 1.05, plg = list(title = "m/s"))
   arrows(xy[ok, 1], xy[ok, 2],
          xy[ok, 1] + uu[ok] * sc, xy[ok, 2] + vv[ok] * sc,
-         length = 0.045, lwd = 1.1, col = arrow_col)
+         length = 0.025, lwd = 0.8, col = arrow_col)
+  if (!is.null(coast)) lines(coast, col = "black", lwd = 1.2)
   sbar(10000, xy = "bottomleft", type = "bar", divs = 2, below = "m", cex = 0.7)
   dev.off()
 
