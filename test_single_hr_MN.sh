@@ -4,7 +4,10 @@
 # a supplied forecast file (start/stop flags are ignored for wx-model runs on this
 # build), so the 1-band hourly file is what makes this a 1-hour run.
 # Output goes to /home/wn1/data/wn_test_outs. Same flags as the full workflow
-# (wn_era5_hi_1hr.py) except output_path and num_threads=4 (nothing else running).
+# (wn_era5_hi_1hr.py) except output_path, num_threads=4 (nothing else running), and
+# momentum_flag=true: conservation of mass AND momentum (NinjaFOAM solver). Requires
+# a WindNinja build with OpenFOAM support and runs much longer than the mass-only
+# solver (tens of minutes vs ~90 s). The full workflow stays mass-only.
 
 OUT_DIR=/home/wn1/data/wn_test_outs
 mkdir -p "$OUT_DIR"
@@ -28,7 +31,7 @@ mkdir -p "$OUT_DIR"
   --write_ascii_output=true \
   --write_farsite_atm=false \
   --output_path="$OUT_DIR" \
-  --momentum_flag=false
+  --momentum_flag=true
 
 echo "WindNinja exit code: $?"
 ls -la "$OUT_DIR"
