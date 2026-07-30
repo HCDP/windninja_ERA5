@@ -18,7 +18,7 @@
 #   --title    plot title line 1 (default "WindNinja 10 m wind")
 #   --name     basename for outputs (default: basename of indir);
 #              PNGs: <name>_<YYYYMMDD_HHMM>.png, GIF: <name>_wind.gif
-#   --delay    GIF frame delay in 1/100 s (default 100 = 1 s per hour)
+#   --delay    GIF frame delay in 1/100 s (default 200 = 2 s per hour)
 #   --fact     arrow aggregation factor in cells (default 6; at 250 m
 #              resolution that is one arrow per 1.5 km)
 #   --tz       time zone label for the title timestamps (default "HST")
@@ -54,7 +54,7 @@ if (is.null(in_dir) || is.null(out_dir)) {
 }
 title_1 <- get_arg("--title", "WindNinja 10 m wind")
 run_name <- get_arg("--name", basename(normalizePath(in_dir, mustWork = FALSE)))
-delay_cs <- as.numeric(get_arg("--delay", "100"))
+delay_cs <- as.numeric(get_arg("--delay", "200"))
 fact     <- as.integer(get_arg("--fact", "6"))
 tz_lab   <- get_arg("--tz", "HST")
 coast_in <- get_arg("--coast", "C:/Users/mpluc/gis_data/hi_coastline/Coastline.shp")
@@ -82,7 +82,7 @@ cat(sprintf("%d frames, global max speed -> shared scale 0..%d m/s\n",
             length(runs), vmax))
 
 pal <- rev(rainbow(100, end = 0.8))       # house-style ramp (matches HCDP wind products)
-arrow_col <- "white"
+arrow_col <- "black"
 
 # optional coastline, reprojected to the raster CRS and cropped to the map
 coast <- NULL
