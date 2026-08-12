@@ -158,6 +158,15 @@ VISUALIZATION (runs locally; needs R with terra + magick)
                      Direction is aggregated through U/V components (never
                      averaged as angles); arrow length scales with speed.
 
+  plot_wind_compare.R  Paired comparison of TWO WindNinja runs over the same
+                       DEM: per common hour a 3-panel figure (run1 | run2 |
+                       run2-run1 difference) with speed panels on one shared
+                       scale across both runs and all hours, the difference on
+                       a symmetric diverging scale, plus an animated GIF:
+                       Rscript plot_wind_compare.R --indir1 <dir> --indir2 <dir> \
+                         --outdir <dir> [--label1 a] [--label2 b] [--title t] \
+                         [--name n] [--delay 200] [--tz HST] [--coast f|none]
+
 EVENT RUN SCRIPTS
 -----------------
   test_single_hr_MN.sh       Maui, 2023-08-08 14:00 HST (Lahaina), one hour,
