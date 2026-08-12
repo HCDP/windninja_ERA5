@@ -127,6 +127,26 @@ MIMIC-MAKING CODE (runs locally, not on the server)
                         target grid is at least 4x4 (a 1.25 deg box needs
                         res <= ~13000).
 
+ERA5/ERA5-LAND BLEND CHAIN (runs locally; needs R with terra + RNetCDF)
+------------------------------------------------------------------------
+  regrid_era5_to_land.R    ERA5 GRIB + ERA5-Land GRIB -> three NetCDFs on the
+                           ERA5-Land 0.1 deg grid: (1) nearest-neighbor
+                           resampled ERA5; (2) blend = ERA5-Land u10/v10/t2 on
+                           its land cells, NN ERA5 elsewhere + tcc (ERA5-Land
+                           has no tcc); (3) smoothed blend = bilinear
+                           tent-kernel smoothing with the ERA5-Land land
+                           pixels restored to original values. Each file
+                           carries a land_source mask; all verified in-script.
+  subset_blend_overlap.R   Subset a blend NetCDF to the datetime range present
+                           in BOTH source GRIBs (no-op when they fully
+                           overlap; the script says so).
+  blend_to_wrfout.R        Blended NetCDF -> hourly single-timestep WRF-mimic
+                           files (wrfout_era5_YYYYMMDD_HHMM.nc), NEAREST-
+                           NEIGHBOR onto an 11 km Mercator grid (preserves the
+                           exact land-cell values). Drop-in for the run
+                           scripts via WN_FORECAST_DIR; --start/--stop UTC
+                           window optional. Used by test_iniki_KA_19920911_blend.sh.
+
 VISUALIZATION (runs locally; needs R with terra + magick)
 ---------------------------------------------------------
   plot_wind_gif.R    Per-hour PNG maps (speed fill + direction arrows, all
