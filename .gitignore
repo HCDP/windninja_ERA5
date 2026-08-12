@@ -1,0 +1,3 @@
+# data files are not versioned - NetCDF outputs/inputs stay out of the repo
+*.nc
+*.nc4
