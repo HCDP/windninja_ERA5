@@ -5,7 +5,7 @@
 # per hour, named by UTC valid time). One WindNinja invocation per hour.
 #
 # Forecast files expected in: /home/wn1/data/input/er5_wrf/hourly/1992_09/
-# Output:                     /home/wn1/data/wn_test_outs/iniki_1992_KA/
+# Output:                     /home/wn1/data/wn_test_outs/test_iniki_KA_19920911/
 #
 # MOMENTUM=true enables the mass+momentum (NinjaFOAM) solver - much slower
 # per hour and requires libWindNinja.so + applyInit built (see README).
@@ -13,7 +13,7 @@
 
 MOMENTUM=${MOMENTUM:-false}
 FC_DIR=${WN_FORECAST_DIR:-/home/wn1/data/input/er5_wrf/hourly/1992_09}
-OUT_DIR=/home/wn1/data/wn_test_outs/iniki_1992_KA
+OUT_DIR=/home/wn1/data/wn_test_outs/$(basename "$0" .sh)
 mkdir -p "$OUT_DIR"
 
 # 11:00-17:00 HST on 1992-09-11 -> UTC valid times (HST + 10h)
